@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart City Dashboard</title>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="ph ph-buildings"></i>
+                <h2>NexusCity</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active"><i class="ph ph-squares-four"></i> <span>Overview</span></a>
+                <a href="#" class="nav-item"><i class="ph ph-car-profile"></i> <span>Traffic</span></a>
+                <a href="#" class="nav-item"><i class="ph ph-drop"></i> <span>Water</span></a>
+                <a href="#" class="nav-item"><i class="ph ph-wind"></i> <span>Air Quality</span></a>
+                <a href="#" class="nav-item"><i class="ph ph-lightning"></i> <span>Energy</span></a>
+                <a href="#" class="nav-item"><i class="ph ph-trash"></i> <span>Waste</span></a>
+                <a href="#" class="nav-item"><i class="ph ph-shield-warning"></i> <span>Safety</span></a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="search-bar">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" placeholder="Search zones, metrics, alerts...">
+                </div>
+                <div class="user-profile">
+                    <div class="notification">
+                        <i class="ph ph-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <img src="https://i.pravatar.cc/150?img=11" alt="Admin" class="avatar">
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Top Cards -->
+                <div class="top-cards">
+                    <div class="card stat-card">
+                        <div class="stat-icon traffic"><i class="ph ph-car"></i></div>
+                        <div class="stat-details">
+                            <h3>Traffic Zones</h3>
+                            <p class="value">12 <span class="status-indicator warning">Active</span></p>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon air"><i class="ph ph-wind"></i></div>
+                        <div class="stat-details">
+                            <h3>Current AQI</h3>
+                            <p class="value">165 <span class="status-indicator warning">Poor</span></p>
+                            <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Primary Pollutant: PM2.5 (75 µg/m³)</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon water"><i class="ph ph-drop"></i></div>
+                        <div class="stat-details">
+                            <h3>Water Reserves</h3>
+                            <p class="value">78% <span class="status-indicator good">Optimal</span></p>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon energy"><i class="ph ph-lightning"></i></div>
+                        <div class="stat-details">
+                            <h3>Power Load</h3>
+                            <p class="value">450 MW <span class="status-indicator danger">High</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Section Grid -->
+                <div class="main-grid">
+                    <!-- Map Section -->
+                    <div class="card map-section item-span-2">
+                        <div class="card-header">
+                            <h3>Live City Map</h3>
+                            <div class="legend">
+                                <span><span class="dot danger"></span> Heavy Traffic/Danger</span>
+                                <span><span class="dot warning"></span> Warning</span>
+                                <span><span class="dot good"></span> Normal</span>
+                            </div>
+                        </div>
+                        <div id="city-map" class="map-container"></div>
+                    </div>
+
+                    <!-- AI Alerts Section -->
+                    <div class="card alerts-section">
+                        <div class="card-header">
+                            <h3><i class="ph ph-brain"></i> AI Intelligence Hub</h3>
+                        </div>
+                        <div class="alerts-list">
+                            <div class="alert-item warning">
+                                <i class="ph ph-car-profile"></i>
+                                <div class="alert-text">
+                                    <strong>Traffic Prediction</strong>
+                                    <span>Jam likely near Geeta Bhawan in 30 mins. Re-routing suggested.</span>
+                                </div>
+                            </div>
+                            <div class="alert-item danger">
+                                <i class="ph ph-drop"></i>
+                                <div class="alert-text">
+                                    <strong>Leak Detected</strong>
+                                    <span>Pressure drop in LIG water lines. Maintenance alerted.</span>
+                                </div>
+                            </div>
+                            <div class="alert-item good">
+                                <i class="ph ph-leaf"></i>
+                                <div class="alert-text">
+                                    <strong>Air Quality Forecast</strong>
+                                    <span>Pollution levels expected to drop by 15% tonight.</span>
+                                </div>
+                            </div>
+                            <div class="alert-item warning">
+                                <i class="ph ph-ambulance"></i>
+                                <div class="alert-text">
+                                    <strong>Emergency Route</strong>
+                                    <span>Ambulance route optimized through Tilak Nagar to avoid congestion.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Sections -->
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>Traffic Density</h3>
+                            <select><option>Today</option><option>Week</option></select>
+                        </div>
+                        <div class="chart-container"><canvas id="trafficChart"></canvas></div>
+                    </div>
+
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>Water Usage by Zone</h3>
+                        </div>
+                        <div class="chart-container"><canvas id="waterChart"></canvas></div>
+                    </div>
+
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>Air Quality Index (AQI)</h3>
+                        </div>
+                        <div class="chart-container"><canvas id="aqiChart"></canvas></div>
+                    </div>
+
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>Energy Consumption</h3>
+                        </div>
+                        <div class="chart-container"><canvas id="energyChart"></canvas></div>
+                    </div>
+
+                    <div class="card chart-card item-span-2">
+                        <div class="card-header">
+                            <h3>Waste Fill Level & Management</h3>
+                        </div>
+                        <div class="chart-container"><canvas id="wasteChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- App JS -->
+    <script src="app.js"></script>
+</body>
+</html>
